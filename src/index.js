@@ -5,10 +5,9 @@ import { Server } from 'socket.io';
 
 import connectDB from './config/dbConfig.js';
 import { PORT } from './config/serverConfig.js';
-import messageHandlers from './controllers/messageSocketController.js';
+import channelSocketHandlers from './controllers/channelSocketcontroller.js';
+import messageSocketHandlers from './controllers/messageSocketController.js';
 import apiRouter from './routes/apiRoutes.js';
-import messageHandlers from './controllers/messageSocketController.js';
-import { stat } from 'fs';
 
 const app = express();
 const server = createServer(app);
@@ -29,7 +28,8 @@ io.on('connection', (socket) => {
   //     status: 'okk'
   //   });
   // });
-  messageHandlers(io, socket);
+  messageSocketHandlers(io, socket);
+  channelSocketHandlers(io, socket);
 });
 server.listen(PORT, () => {
   console.log('server is runnin on ' + PORT);
