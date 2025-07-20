@@ -12,4 +12,5 @@ class ValidationError extends Error {
     this.statusCode = StatusCodes.BAD_REQUEST;
   }
 }
+
 export default ValidationError;
