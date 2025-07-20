@@ -8,10 +8,16 @@ export const signUpService = async (data) => {
   } catch (error) {
     console.log('User service error', error);
     if (error.name === 'ValidationError') {
-      throw new ValidationError({ error: error.errors }, error.message);
+      throw new ValidationError(
+        {
+          error: error.errors
+        },
+        error.message
+      );
     }
-    if (error.name === 'MongoServerError' && error.code === 11000) {
-      //11000 code is a duplicate key error
+    if (error.name === 'MongooseError') {
+      console.log('222222222222222222');
+
       throw new ValidationError(
         {
           error: ['A user with same email or username already exists']
