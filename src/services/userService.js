@@ -6,7 +6,17 @@ export const signUpService = async (data) => {
     const newUser = await userRepository.create(data);
     return newUser;
   } catch (error) {
-    console.log('User service error', error);
+    console.log(
+      'User service error keys:',
+      '-->',
+      error.errors,
+      '++',
+      error.message,
+      '++',
+      error.name,
+      '++',
+      error.code
+    );
     if (error.name === 'ValidationError') {
       throw new ValidationError(
         {
@@ -16,8 +26,6 @@ export const signUpService = async (data) => {
       );
     }
     if (error.name === 'MongooseError') {
-      console.log('222222222222222222');
-
       throw new ValidationError(
         {
           error: ['A user with same email or username already exists']
