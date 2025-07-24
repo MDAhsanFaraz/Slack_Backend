@@ -1,7 +1,7 @@
 import { StatusCodes } from 'http-status-codes';
+import { z } from 'zod';
 
 import { customErrorResponse } from '../utils/common/responseObjects.js';
-import { z } from 'zod';
 
 export const valdiate = (schema) => {
   return async function (req, res, next) {
@@ -12,6 +12,7 @@ export const valdiate = (schema) => {
       console.log('Validation error in zod validator', error.name);
       let explanation = [];
       let errorMessge = '';
+      // used z.treeifyError(error) i read it from the documention imp to convert the error in to obj
       const tree = z.treeifyError(error);
       console.log('tree=>', tree.properties);
       Object.keys(tree.properties).forEach((key) => {
