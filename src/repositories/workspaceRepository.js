@@ -1,9 +1,10 @@
 import { StatusCodes } from 'http-status-codes';
-import Workspace from '../schema/workspace';
-import ClientError from '../utils/errors/clientError';
-import crudRepository from './crudRepository';
-import User from '../schema/user';
-import channelRepository from './channelRepository';
+
+import User from '../schema/user.js';
+import Workspace from '../schema/workspace.js';
+import ClientError from '../utils/errors/clientError.js';
+import channelRepository from './channelRepository.js';
+import crudRepository from './crudRepository.js';
 
 const workspaceRepository = {
   ...crudRepository(Workspace),
@@ -48,7 +49,7 @@ const workspaceRepository = {
         statusCode: StatusCodes.NOT_FOUND
       });
     }
-    const isMemberAlreadyPartOfWorkspace = await workspace.members.find(
+    const isMemberAlreadyPartOfWorkspace = workspace.members.find(
       (member) => member.memberId == memberId
     );
     if (isMemberAlreadyPartOfWorkspace) {
@@ -74,9 +75,7 @@ const workspaceRepository = {
       });
     }
     const isChannelAlreadyPartOfWorkspace = workspace.channels.find(
-      (channel) => {
-        channel.name === channelName;
-      }
+      (channel) => channel.name === channelName
     );
     if (isChannelAlreadyPartOfWorkspace) {
       throw new ClientError({
@@ -90,7 +89,7 @@ const workspaceRepository = {
     await workspace.save();
     return workspace;
   },
-  fechAllWorkspaceByMemberId: async function (memberId) {
+  fetchAllWorkspaceByMemberId: async function (memberId) {
     const workspaces = await Workspace.find({
       'members.memberId': memberId
     }).populate('members.memberId', 'username email avatar');
