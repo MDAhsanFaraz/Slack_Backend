@@ -27,7 +27,7 @@ export const isAuthenticated = async (req, res, next) => {
         })
       );
     }
-    const user = await userRepository.getById(response.id);
+    const user = await userRepository.getById(response.userId);
     req.user = user;
     next();
   } catch (error) {
