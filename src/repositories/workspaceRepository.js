@@ -32,7 +32,7 @@ const workspaceRepository = {
     }
     return workspace;
   },
-  addMemberToWorkspace: async function (memberId, role, workspaceId) {
+  addMemberToWorkspace: async function (workspaceId, memberId, role) {
     const workspace = await Workspace.findById(workspaceId);
     if (!workspace) {
       throw new ClientError({

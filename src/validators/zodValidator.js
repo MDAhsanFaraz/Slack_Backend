@@ -3,7 +3,7 @@ import { z } from 'zod';
 
 import { customErrorResponse } from '../utils/common/responseObjects.js';
 
-export const valdiate = (schema) => {
+export const validate = (schema) => {
   return async function (req, res, next) {
     try {
       await schema.parseAsync(req.body);
