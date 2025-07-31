@@ -9,13 +9,13 @@ import {
 
 export const createWorkspaceController = async (req, res) => {
   try {
-    const response = createWorkspaceService({
+    const response = await createWorkspaceService({
       ...req.body,
       owner: req.user
     });
     return res
       .status(StatusCodes.CREATED)
-      .json(successResponse(response, 'Workspace careted successfully'));
+      .json(successResponse(response, 'Workspace created successfully'));
   } catch (error) {
     console.log('workspaceController error', error);
     if (error.statusCode) {

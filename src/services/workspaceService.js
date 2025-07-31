@@ -6,7 +6,7 @@ import ValidationError from '../utils/errors/validationError.js';
 export const createWorkspaceService = async (workspaceData) => {
   try {
     const joinCode = uuidv4().substring(0, 6).toUpperCase();
-    const response = workspaceRepository.create({
+    const response = await workspaceRepository.create({
       name: workspaceData.name,
       description: workspaceData.description,
       joinCode
@@ -22,7 +22,7 @@ export const createWorkspaceService = async (workspaceData) => {
     );
     return updatedWorkspace;
   } catch (error) {
-    console.log('Create workspace service error', error);
+    console.log('Create workspace service error', error.name);
     if (error.name === 'ValidationError') {
       throw new ValidationError(
         {
@@ -31,7 +31,7 @@ export const createWorkspaceService = async (workspaceData) => {
         error.message
       );
     }
-    if (error.name === 'MongooseError') {
+    if (error.name === 'MongoServerError') {
       throw new ValidationError(
         {
           error: ['A workspace with same details already exists']
