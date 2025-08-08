@@ -89,3 +89,20 @@ export const deleteWorkspaceService = async (workspaceId, userId) => {
     throw error;
   }
 };
+
+export const getWorkspaceService = async (workspaceId, userId) => {};
+export const getWorkspaceJoinCodeService = async (joinCode) => {};
+export const updateWorkspaceJoinCodeService = async (
+  workspaceId,
+  workspaceData,
+  userId
+) => {};
+export const addMemberToWorkspaceService = async (
+  workspaceId,
+  memberId,
+  role
+) => {};
+export const addChannelToWorkspaceService = async (
+  workspaceId,
+  channelName
+) => {};
