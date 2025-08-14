@@ -2,10 +2,10 @@ import { StatusCodes } from 'http-status-codes';
 import { v4 as uuidv4 } from 'uuid';
 
 import channelRepository from '../repositories/channelRepository.js';
+import userRepository from '../repositories/userRepository.js';
 import workspaceRepository from '../repositories/workspaceRepository.js';
 import ClientError from '../utils/errors/clientError.js';
 import ValidationError from '../utils/errors/validationError.js';
-import userRepository from '../repositories/userRepository.js';
 
 const isChannelAlreadyPartOfWorkspace = (workspace, channelName) => {
   return workspace.channels.find(
@@ -128,7 +128,7 @@ export const getWorkspaceService = async (workspaceId, userId) => {
     throw error;
   }
 };
-export const getWorkspaceJoinCodeService = async (joinCode) => {
+export const getWorkspaceJoinCodeService = async (joinCode, userId) => {
   try {
     const workspace = await workspaceRepository.getByJoinCode(joinCode);
     if (!workspace) {
