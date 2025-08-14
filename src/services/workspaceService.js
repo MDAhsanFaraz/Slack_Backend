@@ -209,10 +209,10 @@ export const addMemberToWorkspaceService = async (
       });
     }
     const isMember = isUserMemberOfWorkspace(workspace, isValidUser);
-    if (!isMember) {
+    if (isMember) {
       throw new ClientError({
-        explanation: 'Invalid data sent from the client',
-        message: 'User is not a member of the workspace',
+        explanation: 'User is already a member of the workspace',
+        message: 'User is already a member of the workspace',
         statusCode: StatusCodes.UNAUTHORIZED
       });
     }
