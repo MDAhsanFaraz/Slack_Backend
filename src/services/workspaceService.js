@@ -13,16 +13,23 @@ const isChannelAlreadyPartOfWorkspace = (workspace, channelName) => {
   );
 };
 const isUserAdminOfWorkspace = (workspace, userId) => {
+  console.log(
+    '-->',
+    workspace.members[0].memberId._id.toString() === userId._id.toString()
+  );
   return workspace.members.find(
     (member) =>
-      member.memberId.toString() === userId._id.toString() &&
+      (member.memberId.toString() === userId._id.toString() ||
+        member.memberId._id.toString() === userId._id.toString()) &&
       member.role === 'admin'
   );
 };
 
 const isUserMemberOfWorkspace = (workspace, userId) => {
   return workspace.members.find(
-    (member) => member.memberId.toString() === userId._id.toString()
+    (member) =>
+      member.memberId.toString() === userId._id.toString() ||
+      member.memberId._id.toString() === userId._id.toString()
   );
 };
 export const createWorkspaceService = async (workspaceData) => {
@@ -130,7 +137,8 @@ export const getWorkspaceService = async (workspaceId, userId) => {
 };
 export const getWorkspaceJoinCodeService = async (joinCode, userId) => {
   try {
-    const workspace = await workspaceRepository.getByJoinCode(joinCode);
+    const workspace =
+      await workspaceRepository.getWorkspaceByJoinCode(joinCode);
     if (!workspace) {
       throw new ClientError({
         explanation: 'Invalid data sent from the client',
@@ -153,7 +161,7 @@ export const getWorkspaceJoinCodeService = async (joinCode, userId) => {
   }
 };
 
-export const updateWorkspaceJoinCodeService = async (
+export const updateWorkspaceService = async (
   workspaceId,
   workspaceData,
   userId
@@ -189,7 +197,8 @@ export const updateWorkspaceJoinCodeService = async (
 export const addMemberToWorkspaceService = async (
   workspaceId,
   memberId,
-  role
+  role,
+  userId
 ) => {
   try {
     const workspace = await workspaceRepository.getById(workspaceId);
@@ -200,6 +209,14 @@ export const addMemberToWorkspaceService = async (
         statusCode: StatusCodes.NOT_FOUND
       });
     }
+    const isAdmin = isUserAdminOfWorkspace(workspace, userId);
+    if (!isAdmin) {
+      throw new ClientError({
+        explanation: 'User is not an admin of the workspace',
+        message: 'User is not allowed to add a member to the workspace',
+        statusCode: StatusCodes.UNAUTHORIZED
+      });
+    }
     const isValidUser = await userRepository.getById(memberId);
     if (!isValidUser) {
       throw new ClientError({
@@ -208,6 +225,7 @@ export const addMemberToWorkspaceService = async (
         statusCode: StatusCodes.NOT_FOUND
       });
     }
+
     const isMember = isUserMemberOfWorkspace(workspace, isValidUser);
     if (isMember) {
       throw new ClientError({
