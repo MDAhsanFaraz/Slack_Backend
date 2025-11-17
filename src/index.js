@@ -5,6 +5,7 @@ import { Server } from 'socket.io';
 
 import connectDB from './config/dbConfig.js';
 import { PORT } from './config/serverConfig.js';
+import messageHandlers from './controllers/messageSocketController.js';
 import apiRouter from './routes/apiRoutes.js';
 
 const app = express();
@@ -19,10 +20,14 @@ app.get('/ping', (req, res) => {
 
 io.on('connection', (socket) => {
   console.log('a user connected', socket.id);
-  socket.on('connection1', (data) => {
-    console.log('message from client', data);
-    io.emit('newmessage', data.toUpperCase());
-  });
+  // socket.on('connection1', (data, cb) => {
+  //   console.log('message from client', data);
+  //   socket.broadcast.emit('newmessage', data);
+  //   cb({
+  //     status: 'okk'
+  //   });
+  // });
+  messageHandlers(io, socket);
 });
 server.listen(PORT, () => {
   console.log('server is runnin on ' + PORT);
