@@ -26,3 +26,7 @@ export const getMessageService = async (messageParams, page, limit, user) => {
   console.log(messages);
   return messages;
 };
+export const createMessageService = async (message) => {
+  const newMessage = await messageRepository.create(message);
+  return newMessage;
+};
