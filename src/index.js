@@ -7,6 +7,8 @@ import connectDB from './config/dbConfig.js';
 import { PORT } from './config/serverConfig.js';
 import messageHandlers from './controllers/messageSocketController.js';
 import apiRouter from './routes/apiRoutes.js';
+import messageHandlers from './controllers/messageSocketController.js';
+import { stat } from 'fs';
 
 const app = express();
 const server = createServer(app);
