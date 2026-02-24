@@ -8,7 +8,7 @@ import {
 } from '../utils/common/responseObjects.js';
 export const getChannelByIdController = async (req, res) => {
   try {
-    console.log('===---------->', req.params.channelId, req.user);
+    // console.log('===---------->', req.params.channelId, req.user);
     const response = await getChannelByIdService(
       req.params.channelId,
       req.user
